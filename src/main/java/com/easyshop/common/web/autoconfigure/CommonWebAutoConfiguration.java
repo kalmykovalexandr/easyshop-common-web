@@ -3,6 +3,7 @@ package com.easyshop.common.web.autoconfigure;
 import com.easyshop.common.web.GlobalExceptionHandler;
 import com.easyshop.common.web.ReactiveGlobalExceptionHandler;
 import com.easyshop.common.web.TraceIdFilter;
+import com.easyshop.common.web.TraceIdWebFilter;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -28,7 +29,11 @@ public class CommonWebAutoConfiguration {
     @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
     @Import(ReactiveGlobalExceptionHandler.class)
     static class ReactiveConfig {
-        // No explicit beans; advice class is imported
+        @Bean
+        @ConditionalOnMissingBean
+        public TraceIdWebFilter traceIdWebFilter() {
+            return new TraceIdWebFilter();
+        }
     }
 }
 
